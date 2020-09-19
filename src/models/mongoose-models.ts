@@ -1,4 +1,4 @@
-import { RecurringAlertType, IUser, IAlert } from './models';
+import { RecurringAlertType, IUser, IAlert, recurringAlertTypes } from './models';
 import mongoose, { Schema } from 'mongoose';
 
 const userSchema = new Schema({
@@ -17,7 +17,7 @@ const alertSchema = new Schema({
     serviceName: { type: String, required: [true, 'What service is this reminder for?'] },
     remindBefore: { type: Number, required: [true, 'When do you want us to remind yo?'] },
     expiryDate: { type: Date, required: [true, 'When does this service expires?'] },
-    reccuring: { type: String, default: RecurringAlertType.none, enum: ['NONE', 'WEEKLY', 'MONTHLY', 'YEARLY'] },
+    reccuring: { type: String, default: RecurringAlertType.none, enum: recurringAlertTypes },
     createdOn: { type: Date, default: Date.now() },
 });
 

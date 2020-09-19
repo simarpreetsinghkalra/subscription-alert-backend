@@ -28,3 +28,5 @@ export enum RecurringAlertType {
     monthly = 'MONTHLY',
     yearly = 'YEARLY'
 }
+
+export const recurringAlertTypes = ['NONE', 'WEEKLY', 'MONTHLY', 'YEARLY'];
