@@ -3,8 +3,9 @@ import { Document } from "mongoose";
 export interface IUser extends Document {
     name: String;
     email: String;
-    password: String;
+    password?: String;
     createdOn: Date;
+    refreshToken?: String;
     alerts?: IAlert['_id'][];
 }
 
@@ -17,7 +18,7 @@ export interface IAlert extends Document {
 }
 
 export interface ApiResponse<T> {
-    status: String;
+    success: boolean;
     message: String;
     data: T;
 }

@@ -5,7 +5,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 
-import { userRouter } from './routes';
+import { authRouter, userRouter } from './routes';
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect(process.env.DB_URL ? process.env.DB_URL : '');
 
-app.use(userRouter);
+app.use([authRouter, userRouter]);
 
 app.listen(3000, () => {
     console.log('Server running');

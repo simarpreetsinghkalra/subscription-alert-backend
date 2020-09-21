@@ -1,6 +1,7 @@
 import { userCtrl } from './userController';
-
+import { authCtrl } from './authController';
 
 export {
-    userCtrl
+    userCtrl,
+    authCtrl,
 }

@@ -1,5 +1,7 @@
+import authRouter from './authRoutes';
 import userRouter from './userRoutes';
 
 export {
-    userRouter
+    authRouter,
+    userRouter,
 }
