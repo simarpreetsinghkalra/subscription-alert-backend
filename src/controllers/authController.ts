@@ -68,5 +68,6 @@ const logoutUser = async (req: Request, res: Response) => {
 
 export const authCtrl = {
     loginUser,
-    refreshToken
+    refreshToken,
+    logoutUser,
 }

@@ -5,7 +5,7 @@ import { utils } from '.';
 
 const generateJWT = async (userId: string) => {
     if (process.env.ACCESS_TOKEN_SECRET && process.env.REFRESH_TOKEN_SECRET) {
-        const accessToken = jsonwebtoken.sign({ userId: userId }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30s'});
+        const accessToken = jsonwebtoken.sign({ userId: userId }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
         const refreshToken = jsonwebtoken.sign({ userId: userId }, process.env.REFRESH_TOKEN_SECRET);
         const updatedUser = userService.updateUserRefreshToken(userId, refreshToken);
         if (updatedUser) {
