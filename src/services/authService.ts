@@ -1,6 +1,7 @@
 import { userService } from './userService';
 import { NextFunction, Request, Response } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
+import { HttpError } from '../models';
 
 const generateJWT = async (userId: string) => {
     if (process.env.ACCESS_TOKEN_SECRET && process.env.REFRESH_TOKEN_SECRET) {

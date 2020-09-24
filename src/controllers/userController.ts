@@ -13,7 +13,7 @@ const createUser = async (req: Request, res: Response) => {
                 res.createResponse(500, false, 'Internal Server Error', null);
             }
         } catch (error) {
-            res.createResponse(500, false, 'Internal Server Error', error);
+            res.sendError(error);
         }
     } else {
         res.createResponse(500, false, 'Password does not match with Confirm Password', null);
@@ -32,7 +32,7 @@ const getUser = async (req: Request, res: Response) => {
             res.createResponse(404, false, 'User with given ID not found', null);
         }
     } catch (error) {
-        res.createResponse(500, false, 'Internal Server Error', null);
+        res.sendError(error);
     }
 }
 
