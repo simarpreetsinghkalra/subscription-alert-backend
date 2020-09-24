@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
 import { IUser } from "../models";
-import { utils, userService, authService } from "../services";
+import { userService, authService } from "../services";
 
 const loginUser = async (req: Request, res: Response) => {
     const user: IUser = req.body.data;
@@ -14,23 +14,18 @@ const loginUser = async (req: Request, res: Response) => {
                 const isPassValid = await bcrypt.compare(user.password, foundUser.password.toString());
                 if (isPassValid) {
                     const tokens = await authService.generateJWT(foundUser._id);
-                    const response = utils.createResponse(true, 'Authenticated', tokens);
-                    res.status(200).json(response);
+                    res.createResponse(200, true, 'Authenticated', tokens);;
                 } else {
-                    const response = utils.createResponse(false, 'Authentication Failed: Email or password is wrong', null);
-                    res.status(401).json(response);
+                    res.createResponse(401, false, 'Authentication Failed: Email or password is wrong', null);
                 }
             } else {
-                const response = utils.createResponse(false, 'User with this email does not exist. Please Sign Up before continuing.', null);
-                res.status(404).json(response);
+                res.createResponse(404, false, 'User with this email does not exist. Please Sign Up before continuing.', null);
             }
         } catch (error) {
-            const response = utils.createResponse(false, 'Internal Server Error', error);
-            res.status(500).json(response);
+            res.createResponse(500 ,false, 'Internal Server Error', error);
         }
     } else {
-        const response = utils.createResponse(false, 'Enter valid email and password', null);
-        res.status(404).json(response);
+        res.createResponse(401, false, 'Enter valid email and password', null);
     }
 }
 
@@ -39,15 +34,12 @@ const refreshToken = async (req: Request, res: Response) => {
     if (refreshToken) {
         try {
             const tokens = await authService.refreshTokens(refreshToken);
-            const response = utils.createResponse(true, 'Allocated new tokens', tokens);
-            res.status(200).json(response);
+            res.createResponse(200, true, 'Allocated new tokens', tokens);
         } catch (error) {
-            const response = utils.createResponse(false, 'Operation Failed', error);
-            res.status(500).json(response);
+            res.createResponse(500, false, 'Operation Failed', error);
         }
     } else {
-        const response = utils.createResponse(false, 'Unautorized access detected.', null);
-        res.status(401).json(response);
+        const response = res.createResponse(401, false, 'Unautorized access detected.', null);
     }
 }
 
@@ -55,14 +47,12 @@ const logoutUser = async (req: Request, res: Response) => {
     try {
         const updatedUser = await userService.updateUserRefreshToken(req.body.user.userId, '');
         if (updatedUser) {
-            const response = utils.createResponse(true, 'Logged out.', null);
-            res.status(200).json(response);
+            res.createResponse(200, true, 'Logged out.', null);
         } else {
-            throw 'Problem logging out';
+            throw new HttpError('Problem Logging Out', 500);
         }
     } catch (error) {
-        const response = utils.createResponse(true, 'Internal server error', null);
-        res.status(500).json(response);
+        res.createResponse(500, true, 'Internal server error', error);
     }
 }
 

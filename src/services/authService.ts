@@ -1,7 +1,6 @@
 import { userService } from './userService';
 import { NextFunction, Request, Response } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
-import { utils } from '.';
 
 const generateJWT = async (userId: string) => {
     if (process.env.ACCESS_TOKEN_SECRET && process.env.REFRESH_TOKEN_SECRET) {
@@ -11,10 +10,10 @@ const generateJWT = async (userId: string) => {
         if (updatedUser) {
             return { accessToken, refreshToken }
         } else {
-            throw 'Authentication failed due to backend error';
+            throw new HttpError('Authentication failed due to backend error', 500);
         }
     } else {
-        throw 'Provide Access Token Secret';
+        throw new HttpError('Provide Access Token Secret', 500);
     }
 };
 
@@ -24,21 +23,21 @@ const refreshTokens = async (refreshToken: string) => {
         if (process.env.REFRESH_TOKEN_SECRET) {
             return jsonwebtoken.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, tokenData: any) => {
                 if (err) {
-                    throw err;
+                    throw new HttpError(`${err.message} or Refresh token is expired`, 403);
                 } else {
                     if (tokenData && tokenData.userId ) {
                         const newTokens =  await generateJWT(tokenData.userId);
                         return newTokens;
                     } else {
-                        throw 'Error decrypting data';
+                        throw new HttpError('Error decrypting data', 500);
                     }
                 }
             });
         } else {
-            throw 'Provide Access Token Secret';
+            throw new HttpError('Provide Access Token Secret', 500);
         }
     } else {
-        throw 'Access token is invalid';
+        throw new HttpError('Access token is invalid', 401);
     }
 };
 
@@ -46,14 +45,12 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization']?.toString();
     const token = authHeader && authHeader.split(' ')[1];
     if (token == null) {
-        const response = utils.createResponse(false, 'Unauthorized Access Detected', null);
-        res.status(401).json(response);
+        res.createResponse(401, false, 'Unauthorized Access Detected', null);
     } else {
         if (process.env.ACCESS_TOKEN_SECRET) {
             jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, tokenData) => {
                 if (err) {
-                    const response = utils.createResponse(false, 'Internal Server Error', err);
-                    res.status(500).json(response);
+                    res.createResponse(403, false, 'Authentication Failed: Token Expired', err);
                 } else {
                     req.body.user = tokenData;
                     next();
@@ -61,8 +58,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
             });
         } else {
             // throw 'Invalid Access Token Secret';
-            const response = utils.createResponse(false, 'Verification Failed', null);
-            res.status(500).json(response);
+            res.createResponse(500, false, 'Verification Failed', null);
         }
     }
 }

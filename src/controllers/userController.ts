@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-
-import { UserModel } from '../models/';
-import { userService, utils } from '../services';
+import { userService } from '../services';
 
 const createUser = async (req: Request, res: Response) => {
     const user = req.body.data;
@@ -10,19 +8,15 @@ const createUser = async (req: Request, res: Response) => {
         try {
             const newUser = await userService.createUser(user);
             if (newUser) {
-                const response = utils.createResponse(true, `Now you can login using email ${newUser.email}`, null);
-                res.status(200).json(response);
+                res.createResponse(200, true, `Now you can login using email ${newUser.email}`, null);
             } else {
-                const response = utils.createResponse(false, 'Internal Server Error', null);
-                res.status(500).json(response);
+                res.createResponse(500, false, 'Internal Server Error', null);
             }
         } catch (error) {
-            const response = utils.createResponse(false, 'Internal Server Error', error);
-            res.status(500).json(response);
+            res.createResponse(500, false, 'Internal Server Error', error);
         }
     } else {
-        const response = utils.createResponse(false, 'Password does not match with Confirm Password', null);
-        res.status(500).json(response);
+        res.createResponse(500, false, 'Password does not match with Confirm Password', null);
     }
 };
 
@@ -32,15 +26,13 @@ const getUser = async (req: Request, res: Response) => {
     try {
         const foundUser = await userService.getUserById(req.body.user.userId);
         if (foundUser) {
-            const response = utils.createResponse(true, 'success', foundUser);
-            res.status(200).json(response);
+            res.createResponse(200, true, 'success', foundUser);
+
         } else {
-            const response = utils.createResponse(false, 'User with given ID not found', null);
-            res.status(404).json(response);
+            res.createResponse(404, false, 'User with given ID not found', null);
         }
     } catch (error) {
-        const response = utils.createResponse(false, 'Internal Server Error', null);
-        res.status(500).json(response);
+        res.createResponse(500, false, 'Internal Server Error', null);
     }
 }
 

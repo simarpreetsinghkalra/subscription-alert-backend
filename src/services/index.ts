@@ -1,8 +1,8 @@
 import { authService } from './authService';
-import { utils } from './utils';
+import { middlewares } from './middlewares';
 import { userService } from './userService';
 export {
     authService,
     userService,
-    utils
+    middlewares
 }
