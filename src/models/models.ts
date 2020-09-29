@@ -1,16 +1,16 @@
 import { Document } from "mongoose";
 
 export interface IUser extends Document {
-    name: String;
-    email: String;
-    password?: String;
+    name: string;
+    email: string;
+    password?: string;
     createdOn: Date;
-    refreshToken?: String;
+    refreshToken?: string;
     alerts?: IAlert['_id'][];
 }
 
 export interface IAlert extends Document {
-    serviceName: String;
+    serviceName: string;
     remindBefore: Number;
     expiryDate: Date;
     reccuring: RecurringAlertType;
@@ -19,7 +19,7 @@ export interface IAlert extends Document {
 
 export interface ApiResponse<T> {
     success: boolean;
-    message: String;
+    message: string;
     data: T;
 }
 

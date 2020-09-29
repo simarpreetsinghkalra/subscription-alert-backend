@@ -13,7 +13,7 @@ const loginUser = async (req: Request, res: Response) => {
                 const isPassValid = await bcrypt.compare(user.password, foundUser.password.toString());
                 if (isPassValid) {
                     const tokens = await authService.generateJWT(foundUser._id);
-                    res.createResponse(200, true, 'Authenticated', tokens);;
+                    res.createResponse(200, true, 'Authenticated', tokens);
                 } else {
                     throw new HttpError('Authentication Failed: Email or password is wrong', 401);
                 }

@@ -4,7 +4,7 @@ import { ApiResponse } from '../models/models';
 
 
 const createResponseMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    res.createResponse = (status: number, success: boolean, message: String, data: any) => {
+    res.createResponse = (status: number, success: boolean, message: string, data: any) => {
         const response: ApiResponse<any> = {
             success,
             message,
