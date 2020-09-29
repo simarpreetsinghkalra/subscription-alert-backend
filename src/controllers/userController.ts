@@ -46,10 +46,14 @@ const forgetPassword = async (req: Request, res: Response) => {
         const user: IUser = req.body.data; // email exist here from body data
         if (user.email) {
             const randomPassword = crypto.randomBytes(5).toString('hex');
-            await userService.updateRandomPassword(user.email, randomPassword);
-            const emailText = emailContent.randomPassEmail(randomPassword);
-            await sendEmail(user.email, 'Forget Password', emailText);
-            res.createResponse(200, true, 'New password sent to your email.', null);
+            const updatedUser = await userService.updateRandomPassword(user.email, randomPassword);
+            if (updatedUser) {
+                const emailText = emailContent.randomPassEmail(randomPassword);
+                await sendEmail(user.email, 'Forget Password', emailText);
+                res.createResponse(200, true, 'New password sent to your email.', null);
+            } else {
+                throw new HttpError('User with matching details not found', 404);
+            }
         } else {
             throw new HttpError('Please provide valid email', 400);
         }
