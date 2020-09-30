@@ -2,10 +2,10 @@
   "name": "subscription-alert-backend",
   "version": "1.0.0",
   "description": "RESTful API Backend for subsccription alert Mobile App",
-  "main": "app.js",
+  "main": "build/server.js",
   "scripts": {
     "tsc": "tsc",
-    "devStart": "tsc && node build/app.js",
+    "devStart": "tsc && node build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

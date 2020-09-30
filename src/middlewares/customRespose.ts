@@ -3,7 +3,7 @@ import { HttpError } from '../models';
 import { ApiResponse } from '../models/models';
 
 
-const createResponseMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+const customResponseMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     res.createResponse = (status: number, success: boolean, message: string, data: any) => {
         const response: ApiResponse<any> = {
             success,
@@ -24,6 +24,4 @@ const createResponseMiddleware = async (req: Request, res: Response, next: NextF
     next();
 };
 
-export const middlewares = [
-    createResponseMiddleware,
-];
+export default customResponseMiddleware;

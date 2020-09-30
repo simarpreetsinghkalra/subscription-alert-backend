@@ -1,12 +1,12 @@
 import { emailContent } from './emailContent';
 import { authService } from './authService';
-import sendEmail from './mailer';
-import { middlewares } from './middlewares';
+import { alertService } from './alertService';
 import { userService } from './userService';
+import sendEmail from './mailer';
 export {
     authService,
     userService,
-    middlewares,
+    alertService,
     sendEmail,
     emailContent,
 }
